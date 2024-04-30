@@ -1,13 +1,17 @@
 /**
  * Modified firmware for the Sovol SV06 3D Printer
  * Based on TH3D Unified Firmware Package 
- * Modified: 30.12.2023
+ * Modified: 30.04.2024
  * Modifications: 
  *      Enabled Input Shaping
  *      Enabled Linear Advance
- *      Enabled Runout Sensor (Filament Sensor) - experimental
+ *      Enabled Runout Sensor (Filament Sensor) - experimental  
+ *          - HIGH state indicating that filament is NOT present.
+ *          - Use internal pulldown for filament runout pins.
  *      Modified max temperature for hotend to 300 (really 285 -> HOTEND_OVERSHOOT in configuration_backend.h)
  *      Modified max temperature for bed to 120 (really 110 -> BED_OVERSHOOT in configuration_backend.h)
+ *      Enabled 5015 fan fix to provent whines under 100% speed.
+ *      Modified babystep resolution from 0.025mm to 0.010mm for finer control.
  */
 
 
@@ -31,10 +35,19 @@
 // WHEN DOING MULTIPLE UPDATES WE RECOMMEND HAVING A SD CARD WITH THE STOCK FIRMWARE FOR QUICK FLASHING
 
 //===========================================================================
+//=================================== Info ==================================
+//===========================================================================
+
+// Author info of this build printed to the host during boot and M115
+#define STRING_CONFIG_H_AUTHOR "(Recaf, SV06)" // Who made the changes.
+//#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
+
+
+//===========================================================================
 // ***********   SOVOL PRINTERS w/V1.3.1 Board - GD32F103 CPU   *************
 //===========================================================================
 #define SOVOL_SV06
-// #define SOVOL_SV06_FILAMENT_SENSOR
+#define SOVOL_SV06_FILAMENT_SENSOR
 
 
 // #define SOVOL_SV06_PLUS                 //REQUIRES LCD KIT FOUND HERE: https://www.th3dstudio.com/product/sovol-sv06-plus-12864-lcd-conversion-upgrade-kit/
@@ -205,7 +218,7 @@
 //#define REVERSE_KNOB_DIRECTION
 
 // If you have a 5015 fan that whines when under 100% speed uncomment the below line.
-//#define FAN_FIX
+#define FAN_FIX
 
 // Use your own printer name - Uncomment both lines
 //#define CUSTOM_PRINTER_NAME
@@ -271,7 +284,7 @@
 
 // FINE BABYSTEPPING -------------------------------
 // Enabling the below line will set the babystep resolution from 0.025mm to 0.010mm for finer control.
-//#define FINE_BABYSTEPPING
+#define FINE_BABYSTEPPING
 
 // LINEAR ADVANCE ----------------------------------
 // See here on how to use Linear Advance: http://marlinfw.org/docs/features/lin_advance.html
@@ -523,9 +536,9 @@
   #if ENABLED(FILAMENT_RUNOUT_SENSOR)
     #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
     #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
-    #define FIL_RUNOUT_STATE     LOW       // Pin state indicating that filament is NOT present.
-    #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
-    //#define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
+    #define FIL_RUNOUT_STATE     HIGH       // Pin state indicating that filament is NOT present.
+    //#define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
+    #define FIL_RUNOUT_PULLDOWN           // Use internal pulldown for filament runout pins.
 
     // Set one or more commands to execute on filament runout.
     // (After 'M412 H' Marlin will ask the host to handle the process.)
