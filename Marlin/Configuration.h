@@ -35,15 +35,6 @@
 // WHEN DOING MULTIPLE UPDATES WE RECOMMEND HAVING A SD CARD WITH THE STOCK FIRMWARE FOR QUICK FLASHING
 
 //===========================================================================
-//=================================== Info ==================================
-//===========================================================================
-
-// Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "(Recaf, SV06)" // Who made the changes.
-//#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-
-
-//===========================================================================
 // ***********   SOVOL PRINTERS w/V1.3.1 Board - GD32F103 CPU   *************
 //===========================================================================
 #define SOVOL_SV06
